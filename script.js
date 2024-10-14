@@ -1,4 +1,3 @@
-//your JS code here. If required.
 // script.js
 document.getElementById('submit').addEventListener('click', function() {
     const player1 = document.getElementById('player-1').value;
@@ -21,8 +20,9 @@ function startGame(player1, player2) {
         item.addEventListener('click', function() {
             if (item.innerText === '') {
                 item.innerText = currentSymbol;
-                if (checkWin()) {
+                if (checkWin(currentSymbol)) {
                     document.getElementById('message').innerText = `${currentPlayer}, congratulations you won!`;
+                    gridItems.forEach(cell => cell.removeEventListener('click', arguments.callee)); // Prevent further clicks
                 } else {
                     currentPlayer = currentPlayer === player1 ? player2 : player1;
                     currentSymbol = currentSymbol === 'X' ? 'O' : 'X';
@@ -33,7 +33,7 @@ function startGame(player1, player2) {
     });
 }
 
-function checkWin() {
+function checkWin(symbol) {
     const gridItems = document.querySelectorAll('.grid-item');
     const winPatterns = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -43,7 +43,7 @@ function checkWin() {
 
     return winPatterns.some(pattern => {
         const [a, b, c] = pattern;
-        return gridItems[a].innerText && 
+        return gridItems[a].innerText === symbol && 
                gridItems[a].innerText === gridItems[b].innerText && 
                gridItems[a].innerText === gridItems[c].innerText;
     });
